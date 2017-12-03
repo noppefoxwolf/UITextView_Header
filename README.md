@@ -8,6 +8,8 @@
 
 To run the example project, clone the repo, and run `pod install` from the Example directory first.
 
+![](https://github.com/noppefoxwolf/UITextView_Header/blob/master/resource/sample.gif)
+
 ## Requirements
 
 ## Installation
