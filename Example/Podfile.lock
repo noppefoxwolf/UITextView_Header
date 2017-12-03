@@ -1,0 +1,16 @@
+PODS:
+  - UITextView_Header (0.1.0)
+
+DEPENDENCIES:
+  - UITextView_Header (from `../`)
+
+EXTERNAL SOURCES:
+  UITextView_Header:
+    :path: ../
+
+SPEC CHECKSUMS:
+  UITextView_Header: ffd7b43fc0d40b7964d2b5e63212d3e830fea210
+
+PODFILE CHECKSUM: 80e58ace67e0cc19d580aa9489df5310a6f26670
+
+COCOAPODS: 1.4.0.beta.2
