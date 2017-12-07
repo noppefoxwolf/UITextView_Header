@@ -17,6 +17,7 @@ class ViewController: UIViewController {
     let label = UILabel()
     label.text = "header text"
     textView.headerView = label
+    textView.headerViewSpace = -10
   }
 }
 
