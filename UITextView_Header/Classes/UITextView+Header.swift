@@ -55,7 +55,8 @@ extension UITextView {
   private func layoutFooterView() {
     if let footerView = footerView {
       footerView.frame = bounds
-      footerView.frame.size = footerView.systemLayoutSizeFitting(UILayoutFittingCompressedSize)
+      let fittingSize = CGSize(width: bounds.width, height: CGFloat.greatestFiniteMagnitude)
+      footerView.frame.size = footerView.systemLayoutSizeFitting(fittingSize)
       footerView.frame.origin.y = contentSize.height + footerViewSpace
     }
   }
