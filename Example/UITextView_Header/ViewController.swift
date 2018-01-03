@@ -29,7 +29,7 @@ class ViewController: UIViewController, UITextViewDelegate {
   }
   
   func textViewDidChange(_ textView: UITextView) {
-    textView.textViewDidChange(textView)
+    textView.textViewDidChange()
   }
 }
 

@@ -81,7 +81,7 @@ extension UITextView {
     }
   }
   
-  public func textViewDidChange(_ textView: UITextView) {
+  public func textViewDidChange() {
     layoutFooterView()
   }
 }
