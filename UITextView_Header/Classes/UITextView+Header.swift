@@ -10,7 +10,7 @@ import UIKit
 private var AssociatedObjectHandle: UInt8 = 0
 extension UITextView {
   private static let headerViewTag: Int = 6954
-  private static let headerViewSpaceAssociatedObjectHandle: Int8 = 0
+  private static let footerViewTag: Int = 9794
   
   public var headerView: UIView? {
     get {
@@ -21,11 +21,24 @@ extension UITextView {
       guard let newValue = newValue else { return }
       newValue.tag = UITextView.headerViewTag
       addSubview(newValue)
-      layout()
+      layoutHeaderView()
     }
   }
   
-  private func layout() {
+  public var footerView: UIView? {
+    get {
+      return subviews.filter({ $0.tag == UITextView.footerViewTag }).first
+    }
+    set {
+      newValue?.removeFromSuperview()
+      guard let newValue = newValue else { return }
+      newValue.tag = UITextView.footerViewTag
+      addSubview(newValue)
+      layoutFooterView()
+    }
+  }
+  
+  private func layoutHeaderView() {
     if let headerView = headerView {
       let fittingSize = CGSize(width: bounds.width, height: CGFloat.greatestFiniteMagnitude)
       let systemLayoutSize = headerView.systemLayoutSizeFitting(fittingSize)
@@ -39,13 +52,35 @@ extension UITextView {
     }
   }
   
+  private func layoutFooterView() {
+    if let footerView = footerView {
+      footerView.frame = bounds
+      footerView.frame.size = footerView.systemLayoutSizeFitting(UILayoutFittingCompressedSize)
+      footerView.frame.origin.y = contentSize.height + footerViewSpace
+    }
+  }
+  
   public var headerViewSpace: CGFloat {
     get {
       return objc_getAssociatedObject(self, &AssociatedObjectHandle) as? CGFloat ?? 0.0
     }
     set {
       objc_setAssociatedObject(self, &AssociatedObjectHandle, newValue, objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN_NONATOMIC)
-      layout()
+      layoutHeaderView()
     }
+  }
+  
+  public var footerViewSpace: CGFloat {
+    get {
+      return objc_getAssociatedObject(self, &AssociatedObjectHandle) as? CGFloat ?? 0.0
+    }
+    set {
+      objc_setAssociatedObject(self, &AssociatedObjectHandle, newValue, objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+      layoutFooterView()
+    }
+  }
+  
+  public func textViewDidChange(_ textView: UITextView) {
+    layoutFooterView()
   }
 }
