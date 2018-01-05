@@ -26,6 +26,8 @@ class ViewController: UIViewController, UITextViewDelegate {
     label2.text = "footer text"
     textView.footerView = label2
     textView.footerViewSpace = 0
+    
+    textView.placeholder = NSAttributedString(string: "いまなにしてる？")
   }
   
   func textViewDidChange(_ textView: UITextView) {

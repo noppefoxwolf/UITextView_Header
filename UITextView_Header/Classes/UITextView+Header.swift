@@ -11,13 +11,14 @@ private var AssociatedObjectHandle: UInt8 = 0
 extension UITextView {
   private static let headerViewTag: Int = 6954
   private static let footerViewTag: Int = 9794
+  private static let placeholderLabelTag: Int = 3212
   
   public var headerView: UIView? {
     get {
       return subviews.filter({ $0.tag == UITextView.headerViewTag }).first
     }
     set {
-      newValue?.removeFromSuperview()
+      headerView?.removeFromSuperview()
       guard let newValue = newValue else { return }
       newValue.tag = UITextView.headerViewTag
       addSubview(newValue)
@@ -30,11 +31,38 @@ extension UITextView {
       return subviews.filter({ $0.tag == UITextView.footerViewTag }).first
     }
     set {
-      newValue?.removeFromSuperview()
+      footerView?.removeFromSuperview()
       guard let newValue = newValue else { return }
       newValue.tag = UITextView.footerViewTag
       addSubview(newValue)
       layoutFooterView()
+    }
+  }
+  
+  private var placeholderLabel: UILabel? {
+    get {
+      return subviews.filter({ $0.tag == UITextView.placeholderLabelTag }).first as? UILabel
+    }
+    set {
+      placeholderLabel?.removeFromSuperview()
+      guard let newValue = newValue else { return }
+      newValue.tag = UITextView.placeholderLabelTag
+      addSubview(newValue)
+      layoutPlaceholderLabel()
+    }
+  }
+  
+  public var placeholder: NSAttributedString? {
+    get { return _placeholder }
+    set {
+      _placeholder = newValue
+      if let newValue = newValue {
+        let label = UILabel()
+        label.attributedText = newValue
+        placeholderLabel = label
+      } else {
+        placeholderLabel = nil
+      }
     }
   }
   
@@ -61,6 +89,27 @@ extension UITextView {
     }
   }
   
+  private func layoutPlaceholderLabel() {
+    if let placeholderLabel = placeholderLabel {
+      placeholderLabel.sizeToFit()
+      placeholderLabel.frame.origin = CGPoint(x: textContainerInset.left + textContainer.lineFragmentPadding,
+                                              y: textContainerInset.top)
+    }
+    let isHidden = text.count > 0
+    placeholderLabel?.isHidden = isHidden
+  }
+  
+  private var _placeholder: NSAttributedString? {
+    get {
+      return objc_getAssociatedObject(self, &AssociatedObjectHandle) as? NSAttributedString
+    }
+    set {
+      objc_setAssociatedObject(self, &AssociatedObjectHandle, newValue, objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+    }
+  }
+  
+  
+  
   public var headerViewSpace: CGFloat {
     get {
       return objc_getAssociatedObject(self, &AssociatedObjectHandle) as? CGFloat ?? 0.0
@@ -83,5 +132,6 @@ extension UITextView {
   
   public func textViewDidChange() {
     layoutFooterView()
+    layoutPlaceholderLabel()
   }
 }
